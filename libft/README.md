@@ -8,10 +8,10 @@
 #                                                         :::      ::::::::    #
 #    libft buffed                                       :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ulherrer <ulherrer@student.42madrid.com    +#+  +:+       +#+         #
+#    By: uherrero <uliherre@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/08 19:37:36 by uherrero          #+#    #+#              #
-#    Updated: 2022/03/22 16:46:53 by ulherrer         ##   ######.es           #
+#    Updated: 2022/03/22 16:46:53 by uliherre         ##   ######.es           #
 #                                                                              #
 # **************************************************************************** #
 ```
@@ -20,6 +20,7 @@
 
 - [libft](#libft)
 - [table of contents](#table-of-contents)
+- [subject](#subject)
 - [modules](#modules)
   - [ft_bit](#ft_bit)
   - [ft_put](#ft_put)
@@ -30,6 +31,15 @@
   - [ft_list](#ft_list)
   - [ft_gnl](#ft_gnl)
   - [ft_cronos](#ft_cronos)
+
+# subject
+
+<object data="https://github.com/TIxtex/libft/blob/master/es.subject.pdf" type="application/pdf">
+    <embed src="https://github.com/TIxtex/libft/blob/master/es.subject.pdf">
+        <p>This browser does not support PDFs. PDF link: <a href="https://github.com/TIxtex/libft/blob/master/es.subject.pdf">__PDF__ </a>.</p>
+    </embed>
+</object>
+
 
 # modules
 
