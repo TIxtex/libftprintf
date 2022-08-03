@@ -13,44 +13,11 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 # include <stdarg.h>
-# include <stdio.h>//debug printf
+# include <stdio.h> /*debug printf*/
 # include "libft/libft.h"
 
 # define S_FLAGS "-0.123456789# +"
-#define S_FORMAT "idxXcspu\%"
-
-typedef t_flags (*f_fl)(t_flags, char **);
-typedef int (*f_fo)(t_flags, char **);
-
-const static f_fl fun_flag[16] = {
-	&fl_neg,
-	&fl_zero,
-	&fl_point,
-	&fl_width,
-	&fl_width,
-	&fl_width,
-	&fl_width,
-	&fl_width,
-	&fl_width,
-	&fl_width,
-	&fl_width,
-	&fl_width,
-	&fl_hastag,
-	&fl_sp,
-	&fl_plus,
-	NULL
-};
-
-const static f_fo fun_format[10] = {
-	&fo_int, &fo_int,
-	&fo_hex, &fo_hex,
-	&fo_char,
-	&fo_string,
-	&fo_pointer,
-	&fo_uint,
-	&fo_percent,
-	NULL
-};
+# define S_FORMAT "idxXcspu\%"
 
 typedef struct		s_flags
 {
@@ -71,27 +38,10 @@ typedef struct		s_print
 	va_list			ap;
 }					t_print;
 
-
 int					ft_printf(const char *str, ...);
-void				pf_flag_set_handler(va_list ap, char **str);
-void				ft_format_select_handler(t_print *print);
-void				ft_print_int(t_print *print);
-void				ft_putchar_repeat(t_print *print, int num, char c);
-void				ft_print_char(t_print *print);
-void				ft_print_string(t_print *print);
-void				ft_print_unsigned(t_print *print);
-void				ft_print_hex(t_print *print);
-void				ft_print_pointer(t_print *print);
-void				ft_print_percent(t_print *print);
-void				ft_print_sp(t_print *print, int flag, t_ss str);
-void				ft_print_zeros(t_print *print, t_ss str);
-void				ft_incrust_zeros(t_print *print, t_ss *str);
-void				ft_incrust_zeros_neg(t_ss *str, char *zs_aux,
-					char *str_aux);
-
-int	p_spaces(t_flags flags, int flag, t_ss str)
-int	p_zeros(t_flags flags, t_ss str)
-int	p_incrust_zeros(t_flags flags, t_ss str)/* * */
+int					p_spaces(t_flags flags, int flag, t_ss str);
+int					p_zeros(t_flags flags, t_ss str);
+int					p_incrust_zeros(t_flags flags, t_ss str);/* * */
 /**	F_FLAGS	**/
 t_flags				fl_neg(t_flags flags, char **str);
 t_flags				fl_zero(t_flags flags, char **str);
@@ -101,6 +51,18 @@ t_flags				fl_asterisk(t_flags flags, char **str);
 t_flags				fl_hastag(t_flags flags, char **str);
 t_flags				fl_sp(t_flags flags, char **str);
 t_flags				fl_plus(t_flags flags, char **str);
+
 /**	F_FORMATS	**/
+int					fo_int(t_flags flags, char **str, va_list ap);
+int					fo_uint(t_flags flags, char **str, va_list ap);
+int					fo_hex(t_flags flags, char **str, va_list ap);
+int					fo_char(t_flags flags, char **str, va_list ap);
+int					fo_string(t_flags flags, char **str, va_list ap);
+int					fo_percent(t_flags flags, char **str, va_list ap);
+int					fo_pointer(t_flags flags, char **str, va_list ap);
+
+char				*ft_utoh(unsigned int);
+char				*ft_utohh(unsigned int);
+char				*ft_lutohh(unsigned long);
 
 #endif

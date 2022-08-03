@@ -10,14 +10,44 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "printf.h"
 
-static int	pf_format_handler(va_list ap, char **str)
+static int (*f_fo[10])(t_flags, char **, va_list) = {
+	&fo_int, &fo_int,
+	&fo_hex, &fo_hex,
+	&fo_char,
+	&fo_string,
+	&fo_pointer,
+	&fo_uint,
+	&fo_percent,
+	NULL
+};
+
+static t_flags (*f_fl[16])(t_flags, char **) = {
+	&fl_neg,
+	&fl_zero,
+	&fl_point,
+	&fl_width,
+	&fl_width,
+	&fl_width,
+	&fl_width,
+	&fl_width,
+	&fl_width,
+	&fl_width,
+	&fl_width,
+	&fl_width,
+	&fl_hastag,
+	&fl_sp,
+	&fl_plus,
+	NULL
+};
+
+static int	pf_format_handler(t_flags flags, char **str, va_list ap)
 {
 	register char	*door;
 
 	door = ft_strchr(S_FORMAT, **str);
-	return(fun_format[door - S_FLAGS](ap, str));
+	return(f_fo[door - S_FLAGS](flags, str, ap));
 }
 
 static t_flags flags_init(void
@@ -39,8 +69,7 @@ static int	pf_flag_set_handler(va_list ap, char **str)
 {
 	t_flags			flags;
 	register char	*door;
-	register char	*s;
-	int				p_n;
+	char	*s;
 
 	flags = flags_init();
 	s = *str + 1;
@@ -48,10 +77,10 @@ static int	pf_flag_set_handler(va_list ap, char **str)
 	while (NULL != door)
 	{
 		str = &s;
-		flags = fun_flag[door - S_FLAGS](flags, str);
+		flags = f_fl[door - S_FLAGS](flags, str);
 		door = ft_strchr(S_FLAGS, (int) *s);
 	}
-	p_n = pf_format_handler(ap, str);
+	return (pf_format_handler(flags, str, ap));
 }
 
 static int	ft_core(va_list ap, char *str)
@@ -73,7 +102,7 @@ static int	ft_core(va_list ap, char *str)
 		}
 		while ('%' == *str)
 		{
-			p_n += ft_flag_set_handler(&str);
+			p_n += pf_flag_set_handler(ap, &str);
 		}
 	}
 	return (p_n);
@@ -88,7 +117,7 @@ int	ft_printf(const char *str, ...)
 	if (NULL != str)
 	{
 		va_start(ap, str);
-		p_n = ft_core(ap, str);
+		p_n = ft_core(ap, (char *)str);
 		va_end(ap);
 	}
 	return (p_n);

@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME = libft.a
-CC = clang -std=c89
+CC = gcc -std=c89
 CFLAGS = -Wall -Wextra -Werror
 
 INCLUDE = libft.h
@@ -96,7 +96,7 @@ $(SOURCES_TIME)
 OBJECTS = \
 $(ALL_SOURCES:.c=.o)
 
-.PHONY: all clean fclean f re
+.PHONY: all clean fclean f re list_objects
 
 $(NAME): $(OBJECTS) $(INCLUDE)
 	ar rc $(NAME) $(OBJECTS)
@@ -110,3 +110,6 @@ fclean: clean
 	/bin/rm -rf $(NAME)
 f: fclean
 re: fclean all
+
+list_objects:
+	@ls --format=single-column * | grep "\.o"

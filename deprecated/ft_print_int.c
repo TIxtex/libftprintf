@@ -14,13 +14,13 @@
 
 void	ft_print_int(t_print *print)
 {
-	t_sstr	*str_aux;
+	t_ss	*str_aux;
 
 	str_aux = ft_calloc(1, sizeof(t_sstr));
 	str_aux->len = va_arg(print->ap, int);
 	str_aux->i = ft_itoa(str_aux->len);
-	str_aux->len = ('0' == *str_aux->i && 0 == *print->flags->point)
-	? 0 : ft_strlen(str_aux->i);
+	str_aux->len = 
+	('0' == *str_aux->i && 0 == *print->flags->point) ? 0 : ft_strlen(str_aux->i);
 	ft_print_sp(print, *print->flags->width, *str_aux);
 	ft_incrust_zeros(print, str_aux);
 	write(1, str_aux->i, str_aux->len);
