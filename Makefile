@@ -1,8 +1,9 @@
 NAME = libftprintf.a
 CC = gcc -std=c89
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -pedantic
 
 INCLUDE = libft/libft.h printf.h
+LIB = libft/
 SOURCES = printf.c \
 pf_print.c \
 pf_print_b.c \
@@ -12,28 +13,21 @@ pf_print_tools.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
-$(MAKE_OBJECTS_LFT): $(INCLUDE)
-	cd libft && make
-	OBJECTS_LFT=$(make list_objects)
-	cd ..
-
 .PHONY: all clean fclean f re
 
 $(NAME): $(INCLUDE) $(OBJECTS)
-	cd libft && make && OBJECTS_LFT=/bin/sh make list_objects
-	OBJECTS_LFTA=$(OBJECTS_LFT:.=libft/.)
-	cd ..
-	ar rc $(NAME) $(OBJECTS) $(OBJECTS_LFTA)
+	make -C $(LIB)
+	cp libft/libft.a $(NAME)
+	ar rcs $(NAME) $(OBJECTS)
 	ranlib $(NAME)
 
 all: $(NAME)
+
 clean:
-	/bin/rm -rf $(OBJECTS)
-	cd libft && make clean
-	cd ..
+	@/bin/rm -rf $(OBJECTS)
+	@make clean -C $(LIB)
 fclean: clean
-	/bin/rm -rf $(NAME)
-	cd libft && make fclean
-	cd ..
+	@/bin/rm -rf $(NAME)
+	@make fclean -C $(LIB)
 f: fclean
-re: fclean all
+re: f all

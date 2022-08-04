@@ -1,27 +1,25 @@
 #include "printf.h"
 
-int	fo_percent(t_flags flags, char **str, va_list ap)
+int	fo_percent(t_flags flags, va_list ap)
 {
 	t_ss			sstr;
 	register int	p_n;
 
-	(void)str;
 	(void) ap;
 	sstr.size = 1;
-	sstr.str = *str;
+	sstr.str = "%";
 	p_n = p_spaces(flags, flags.width, sstr);
 	p_n += p_zeros(flags, sstr);
-	p_n += write(STDOUT_FILENO, "\%", sizeof(char));
+	p_n += write(STDOUT_FILENO, sstr.str, sizeof(char));
 	p_n += p_spaces(flags, flags.neg, sstr);
 	return (p_n);
 }
 
-int	fo_int(t_flags flags, char **str, va_list ap)
+int	fo_int(t_flags flags, va_list ap)
 {
 	t_ss			sstr;
 	register int	p_n;
 
-	(void)str;
 	p_n = va_arg(ap, int);
 	sstr.str = ft_itoa(p_n);
 	sstr.size = ZERO;
@@ -35,12 +33,11 @@ int	fo_int(t_flags flags, char **str, va_list ap)
 	return (p_n);
 }
 
-int	fo_uint(t_flags flags, char **str, va_list ap)
+int	fo_uint(t_flags flags, va_list ap)
 {
 	t_ss			sstr;
 	register int	p_n;
 
-	(void)str;
 	sstr.size = va_arg(ap, unsigned int);
 	sstr.str = ft_utoa(sstr.size);
 	sstr.size = ZERO;
@@ -54,14 +51,13 @@ int	fo_uint(t_flags flags, char **str, va_list ap)
 	return (p_n);
 }
 
-int	fo_char(t_flags flags, char **str, va_list ap)
+int	fo_char(t_flags flags, va_list ap)
 {
 	register int	p_n;
 	char			aux;
 	char			*sp_aux;
 	char			c;
 
-	(void)str;
 	sp_aux = &c;
 	p_n = va_arg(ap, int);
 	aux = (char) p_n;
@@ -80,14 +76,13 @@ int	fo_char(t_flags flags, char **str, va_list ap)
 	return (p_n);
 }
 
-int	fo_string(t_flags flags, char **str, va_list ap)
+int	fo_string(t_flags flags, va_list ap)
 {
 	register int	p_n;
 	t_ss			sstr;
 	char			*sp_aux;
 	char			c;
 
-	(void)str;
 	sp_aux = &c;
 	sstr.str = va_arg(ap, char *);
 	if (NULL == sstr.str)

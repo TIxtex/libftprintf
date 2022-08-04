@@ -17,7 +17,7 @@
 # include "libft/libft.h"
 
 # define S_FLAGS "-0.123456789# +"
-# define S_FORMAT "idxXcspu\%"
+# define S_FORMAT "idxXcspu%"
 
 typedef struct		s_flags
 {
@@ -53,16 +53,13 @@ t_flags				fl_sp(t_flags flags, char **str);
 t_flags				fl_plus(t_flags flags, char **str);
 
 /**	F_FORMATS	**/
-int					fo_int(t_flags flags, char **str, va_list ap);
-int					fo_uint(t_flags flags, char **str, va_list ap);
-int					fo_hex(t_flags flags, char **str, va_list ap);
-int					fo_char(t_flags flags, char **str, va_list ap);
-int					fo_string(t_flags flags, char **str, va_list ap);
-int					fo_percent(t_flags flags, char **str, va_list ap);
-int					fo_pointer(t_flags flags, char **str, va_list ap);
-
-char				*ft_utoh(unsigned int);
-char				*ft_utohh(unsigned int);
-char				*ft_lutohh(unsigned long);
+int					fo_int(t_flags flags, va_list ap);
+int					fo_uint(t_flags flags, va_list ap);
+int					fo_hex(t_flags flags, va_list ap);
+int					fo_hhex(t_flags flags, va_list ap);
+int					fo_char(t_flags flags, va_list ap);
+int					fo_string(t_flags flags, va_list ap);
+int					fo_percent(t_flags flags, va_list ap);
+int					fo_pointer(t_flags flags, va_list ap);
 
 #endif

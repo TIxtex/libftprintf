@@ -12,9 +12,9 @@
 
 #include "printf.h"
 
-static int (*f_fo[10])(t_flags, char **, va_list) = {
+static int (*f_fo[10])(t_flags, va_list) = {
 	&fo_int, &fo_int,
-	&fo_hex, &fo_hex,
+	&fo_hex, &fo_hhex,
 	&fo_char,
 	&fo_string,
 	&fo_pointer,
@@ -47,7 +47,7 @@ static int	pf_format_handler(t_flags flags, char **str, va_list ap)
 	register char	*door;
 
 	door = ft_strchr(S_FORMAT, **str);
-	return(f_fo[door - S_FLAGS](flags, str, ap));
+	return(f_fo[door - S_FLAGS](flags, ap));
 }
 
 static t_flags flags_init(void
@@ -69,18 +69,19 @@ static int	pf_flag_set_handler(va_list ap, char **str)
 {
 	t_flags			flags;
 	register char	*door;
-	char	*s;
+	int				p_n;
 
 	flags = flags_init();
-	s = *str + 1;
-	door = ft_strchr(S_FLAGS, (int) *s);
+	(*str)++;
+	door = ft_strchr(S_FLAGS, (int) **str);
 	while (NULL != door)
 	{
-		str = &s;
 		flags = f_fl[door - S_FLAGS](flags, str);
-		door = ft_strchr(S_FLAGS, (int) *s);
+		door = ft_strchr(S_FLAGS, (int) **str);
 	}
-	return (pf_format_handler(flags, str, ap));
+	p_n = pf_format_handler(flags, str, ap);
+	(*str)++;
+	return (p_n);
 }
 
 static int	ft_core(va_list ap, char *str)
