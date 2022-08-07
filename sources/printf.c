@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 static int (*f_fo[10])(t_flags, va_list) = {
 	&fo_int, &fo_int,

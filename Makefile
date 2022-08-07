@@ -15,7 +15,7 @@ pf_flag.c \
 pf_flag_b.c \
 pf_print_tools.c
 
-ALL_S = $(SOURCES:.c=$(DIR).c)
+ALL_S = $(SOURCES:%.c=$(DIR)%.c)
 
 OBJECTS = $(ALL_S:.c=.o)
 

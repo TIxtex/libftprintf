@@ -1,4 +1,4 @@
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 int	fo_percent(t_flags flags, va_list ap)
 {
