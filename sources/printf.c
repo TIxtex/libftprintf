@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 
 static int (*f_fo[10])(t_flags, va_list) = {
 	&fo_int, &fo_int,
@@ -44,10 +44,14 @@ static t_flags (*f_fl[16])(t_flags, char **) = {
 
 static int	pf_format_handler(t_flags flags, char **str, va_list ap)
 {
-	register char	*door;
+	int x;
+	char	*door;
+	const char	*format;
 
-	door = ft_strchr(S_FORMAT, **str);
-	return(f_fo[door - S_FLAGS](flags, ap));
+	format = S_FORMAT;
+	door = ft_strchr(format, **str);
+	x = door - format;
+	return(f_fo[x](flags, ap));
 }
 
 static t_flags flags_init(void
@@ -93,13 +97,12 @@ static int	ft_core(va_list ap, char *str)
 	while (ZERO != *str)
 	{
 		size = ZERO;
-		while ('%' != *str && ZERO != *str)
+		while ('%' != str[size] && ZERO != str[size])
 			size++;
 		if (ZERO != size)
 		{
-			write(STDOUT_FILENO, str, size);
+			p_n += write(STDOUT_FILENO, str, size);
 			str += size;
-			p_n += size;
 		}
 		while ('%' == *str)
 		{

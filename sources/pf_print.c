@@ -1,4 +1,4 @@
-#include "printf.h"
+#include "ft_printf.h"
 
 int	fo_percent(t_flags flags, va_list ap)
 {
@@ -25,9 +25,18 @@ int	fo_int(t_flags flags, va_list ap)
 	sstr.size = ZERO;
 	if (ZERO != *sstr.str || ZERO != flags.point)
 		sstr.size = ft_strlen(sstr.str);
-	p_n = p_spaces(flags, flags.width, sstr);
+	if (1 == flags.sp && ZERO <= p_n)
+		p_n = write(STDOUT_FILENO, " ", 1 * sizeof(char));
+	else if (1 == flags.plus && ZERO <= p_n)
+		p_n = write(STDOUT_FILENO, "+", 1 * sizeof(char));
+	else
+		p_n = ZERO;
+	p_n += p_spaces(flags, flags.width, sstr);
 	p_n += p_incrust_zeros(flags, sstr);
-	p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
+	if ('-' == *sstr.str)
+		p_n += write(STDOUT_FILENO, sstr.str + 1, (sstr.size - 1) * sizeof(char));
+	else
+		p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
 	p_n += p_spaces(flags, flags.neg, sstr);
 	free(sstr.str);
 	return (p_n);
@@ -56,22 +65,24 @@ int	fo_char(t_flags flags, va_list ap)
 	register int	p_n;
 	char			aux;
 	char			*sp_aux;
-	char			c;
 
-	sp_aux = &c;
 	p_n = va_arg(ap, int);
 	aux = (char) p_n;
 	p_n = ZERO;
 	if (flags.width > 1)
 	{
+		sp_aux = (char *) malloc((flags.width - 1) * sizeof(char));
 		sp_aux = (char *) ft_memset((void *) sp_aux, ' ', flags.width - 1);
 		p_n += write(STDOUT_FILENO, sp_aux, flags.width - 1);
+		free(sp_aux);
 	}
 	p_n += write(STDOUT_FILENO, &aux, sizeof(char));
 	if (flags.neg > 1)
 	{
+		sp_aux = (char *) malloc((flags.neg - 1) * sizeof(char));
 		sp_aux = (char *) ft_memset((void *) sp_aux, ' ', flags.neg - 1);
 		p_n += write(STDOUT_FILENO, sp_aux, flags.neg - 1);
+		free(sp_aux);
 	}
 	return (p_n);
 }
@@ -93,19 +104,25 @@ int	fo_string(t_flags flags, va_list ap)
 	p_n = ZERO;
 	if (flags.width > (int) sstr.size)
 	{
+		sp_aux = (char *) malloc((flags.width - sstr.size) * sizeof(char));
 		sp_aux = ft_memset((void *) sp_aux, ' ', flags.width - sstr.size);
 		p_n += write(STDOUT_FILENO, sp_aux, flags.width - sstr.size);
+		free(sp_aux);
 	}
 	if (flags.zero > (int) sstr.size)
 	{
+		sp_aux = (char *) malloc((flags.zero - sstr.size) * sizeof(char));
 		sp_aux = ft_memset((void *) sp_aux, '0', flags.zero - sstr.size);
 		p_n += write(STDOUT_FILENO, sp_aux, flags.zero - sstr.size);
+		free(sp_aux);
 	}
 	p_n +=	write(STDOUT_FILENO, sstr.str, sstr.size);
 	if (flags.neg > (int) sstr.size)
 	{
+		sp_aux = (char *) malloc((flags.neg - sstr.size) * sizeof(char));
 		sp_aux = ft_memset((void *) sp_aux, ' ', flags.neg - sstr.size);
 		p_n += write(STDOUT_FILENO, sp_aux, flags.neg - sstr.size);
+		free(sp_aux);
 	}
 	return (p_n);
 }

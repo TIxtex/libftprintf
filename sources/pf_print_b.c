@@ -1,9 +1,9 @@
-#include "printf.h"
+#include "ft_printf.h"
 
 static char	*ft_utohh(unsigned int tohex)
 {
-	char *str_aux;
-	char *str_start;
+	char	*str_aux;
+	char	*str_start;
 
 	str_aux = ft_calloc(9, sizeof(char));
 	str_start = str_aux;
@@ -18,12 +18,12 @@ static char	*ft_utohh(unsigned int tohex)
 	ft_strrev(str_start);
 	return (str_start);
 }
-static char	*ft_lutoh(unsigned long tohex)
+static char	*ft_lutoh(unsigned long long tohex)
 {
-	char *str_aux;
-	char *str_start;
+	char	*str_aux;
+	char	*str_start;
 
-	str_aux = ft_calloc(13, sizeof(char));
+	str_aux = ft_calloc(22, sizeof(char));
 	str_start = str_aux;
 	if (tohex == 0)
 		*str_aux = '0';
@@ -47,10 +47,14 @@ int	fo_hex(t_flags flags, va_list ap)
 	sstr.size = ZERO;
 	if ('0' != *sstr.str || ZERO != flags.point)
 		sstr.size = ft_strlen(sstr.str);
-	p_n = p_spaces(flags, flags.width, sstr);
+	if (1 == flags.hastag && p_n)
+		p_n = write(STDOUT_FILENO, "0x", 2 * sizeof(char));
+	else
+		p_n = ZERO;
+	p_n += p_spaces(flags, flags.width, sstr);
 	p_n += p_zeros(flags, sstr);
 	p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
-	p_n = p_spaces(flags, flags.neg, sstr);
+	p_n += p_spaces(flags, flags.neg, sstr);
 	free(sstr.str);
 	return ((int) p_n);
 }
@@ -65,10 +69,14 @@ int	fo_hhex(t_flags flags, va_list ap)
 	sstr.size = ZERO;
 	if ('0' != *sstr.str || ZERO != flags.point)
 		sstr.size = ft_strlen(sstr.str);
-	p_n = p_spaces(flags, flags.width, sstr);
+	if (1 == flags.hastag && p_n)
+		p_n = write(STDOUT_FILENO, "0X", 2 * sizeof(char));
+	else
+		p_n = ZERO;
+	p_n += p_spaces(flags, flags.width, sstr);
 	p_n += p_zeros(flags, sstr);
 	p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
-	p_n = p_spaces(flags, flags.neg, sstr);
+	p_n += p_spaces(flags, flags.neg, sstr);
 	free(sstr.str);
 	return ((int) p_n);
 }
@@ -97,3 +105,4 @@ int	fo_pointer(t_flags flags, va_list ap)
 	free(sstr.str);
 	return (p_n);
 }
+
