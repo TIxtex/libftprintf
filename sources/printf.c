@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   printf.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tixtex <tixtex@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:14:26 by uherrero          #+#    #+#             */
-/*   Updated: 2020/02/24 18:45:30 by tixtex           ###   ########.fr       */
+/*   Updated: 2022/08/15 12:05:46 by uliherre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
 
-static int (*f_fo[10])(t_flags, va_list) = {
+static int		(*g_f_fo[10])(t_flags, va_list) = {
 	&fo_int, &fo_int,
 	&fo_hex, &fo_hhex,
 	&fo_char,
@@ -23,7 +23,7 @@ static int (*f_fo[10])(t_flags, va_list) = {
 	NULL
 };
 
-static t_flags (*f_fl[16])(t_flags, char **) = {
+static t_flags	(*g_f_fl[16])(t_flags, char **) = {
 	&fl_neg,
 	&fl_zero,
 	&fl_point,
@@ -44,18 +44,17 @@ static t_flags (*f_fl[16])(t_flags, char **) = {
 
 static int	pf_format_handler(t_flags flags, char **str, va_list ap)
 {
-	int x;
-	char	*door;
+	int			x;
+	char		*door;
 	const char	*format;
 
 	format = S_FORMAT;
 	door = ft_strchr(format, **str);
 	x = door - format;
-	return(f_fo[x](flags, ap));
+	return (g_f_fo[x](flags, ap));
 }
 
-static t_flags flags_init(void
-)
+static t_flags	flags_init(void)
 {
 	t_flags	flags;
 
@@ -80,7 +79,7 @@ static int	pf_flag_set_handler(va_list ap, char **str)
 	door = ft_strchr(S_FLAGS, (int) **str);
 	while (NULL != door)
 	{
-		flags = f_fl[door - S_FLAGS](flags, str);
+		flags = g_f_fl[door - S_FLAGS](flags, str);
 		door = ft_strchr(S_FLAGS, (int) **str);
 	}
 	p_n = pf_format_handler(flags, str, ap);

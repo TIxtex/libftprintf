@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pf_print_b.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/15 11:21:33 by uliherre          #+#    #+#             */
+/*   Updated: 2022/09/12 00:39:52 by uliherre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../ft_printf.h"
 
-static char	*ft_utohh(unsigned int tohex)
+char	*ft_utohh(unsigned int tohex)
 {
 	char	*str_aux;
 	char	*str_start;
@@ -11,14 +23,18 @@ static char	*ft_utohh(unsigned int tohex)
 		*str_aux = '0';
 	while (tohex != 0)
 	{
-		*str_aux = (tohex % 16 < 10) ? '0' + (tohex % 16) : 55 + (tohex % 16);
+		if (tohex % 16 < 10)
+			*str_aux = '0' + (tohex % 16);
+		else
+			*str_aux = 55 + (tohex % 16);
 		str_aux++;
 		tohex /= 16;
 	}
 	ft_strrev(str_start);
 	return (str_start);
 }
-static char	*ft_lutoh(unsigned long long tohex)
+
+char	*ft_lutoh(unsigned long long tohex)
 {
 	char	*str_aux;
 	char	*str_start;
@@ -29,7 +45,10 @@ static char	*ft_lutoh(unsigned long long tohex)
 		*str_aux = '0';
 	while (tohex != 0)
 	{
-		*str_aux = (tohex % 16 < 10) ? '0' + (tohex % 16) : 87 + (tohex % 16);
+		if (tohex % 16 < 10)
+			*str_aux = '0' + (tohex % 16);
+		else
+			*str_aux = 87 + (tohex % 16);
 		str_aux++;
 		tohex /= 16;
 	}
@@ -52,7 +71,7 @@ int	fo_hex(t_flags flags, va_list ap)
 	else
 		p_n = ZERO;
 	p_n += p_spaces(flags, flags.width, sstr);
-	p_n += p_zeros(flags, sstr);
+	p_n += p_zeros_point(flags, sstr);
 	p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
 	p_n += p_spaces(flags, flags.neg, sstr);
 	free(sstr.str);
@@ -74,7 +93,7 @@ int	fo_hhex(t_flags flags, va_list ap)
 	else
 		p_n = ZERO;
 	p_n += p_spaces(flags, flags.width, sstr);
-	p_n += p_zeros(flags, sstr);
+	p_n += p_zeros_point(flags, sstr);
 	p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
 	p_n += p_spaces(flags, flags.neg, sstr);
 	free(sstr.str);
@@ -84,7 +103,7 @@ int	fo_hhex(t_flags flags, va_list ap)
 int	fo_pointer(t_flags flags, va_list ap)
 {
 	register int			p_n;
-	void 					*p;
+	void					*p;
 	t_ss					sstr;
 
 	p = va_arg(ap, void *);
@@ -98,11 +117,10 @@ int	fo_pointer(t_flags flags, va_list ap)
 	p_n = p_spaces(flags, flags.width, sstr);
 	p_n += write(STDOUT_FILENO, "0x", 2 * sizeof(char));
 	sstr.size -= 2;
-	p_n += p_zeros(flags, sstr);
+	p_n += p_zeros_point(flags, sstr);
 	p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
 	sstr.size += 2;
 	p_n += p_spaces(flags, flags.neg, sstr);
 	free(sstr.str);
 	return (p_n);
 }
-

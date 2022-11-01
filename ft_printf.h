@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tixtex <tixtex@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 20:19:23 by uherrero          #+#    #+#             */
-/*   Updated: 2020/02/24 18:51:41 by tixtex           ###   ########.fr       */
+/*   Updated: 2022/09/12 00:45:58 by uliherre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define S_FLAGS "-0.123456789# +"
 # define S_FORMAT "idxXcspu%"
 
-typedef struct		s_flags
+typedef struct s_flags
 {
 	int				neg;
 	int				zero;
@@ -30,7 +30,7 @@ typedef struct		s_flags
 	int				plus;
 }					t_flags;
 
-typedef struct		s_print
+typedef struct s_print
 {
 	int				char_print;
 	const char		*str;
@@ -39,9 +39,15 @@ typedef struct		s_print
 }					t_print;
 
 int					ft_printf(const char *str, ...);
+
+/**	F_PRINTS	**/
+int					p_aux(char print, int size);
 int					p_spaces(t_flags flags, int flag, t_ss str);
-int					p_zeros(t_flags flags, t_ss str);
-int					p_incrust_zeros(t_flags flags, t_ss str);/* * */
+int					p_zeros_point(t_flags flags, t_ss str);
+int					p_incrust_zeros(t_flags flags, t_ss str);
+char				*ft_utohh(unsigned int tohex);
+char				*ft_uitoa(unsigned int n);
+
 /**	F_FLAGS	**/
 t_flags				fl_neg(t_flags flags, char **str);
 t_flags				fl_zero(t_flags flags, char **str);

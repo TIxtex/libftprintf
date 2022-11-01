@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pf_print.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/15 11:21:06 by uliherre          #+#    #+#             */
+/*   Updated: 2022/09/12 00:44:33 by uliherre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../ft_printf.h"
 
 int	fo_percent(t_flags flags, va_list ap)
@@ -9,7 +21,7 @@ int	fo_percent(t_flags flags, va_list ap)
 	sstr.size = 1;
 	sstr.str = "%";
 	p_n = p_spaces(flags, flags.width, sstr);
-	p_n += p_zeros(flags, sstr);
+	p_n += p_zeros_point(flags, sstr);
 	p_n += write(STDOUT_FILENO, sstr.str, sizeof(char));
 	p_n += p_spaces(flags, flags.neg, sstr);
 	return (p_n);
@@ -34,7 +46,7 @@ int	fo_int(t_flags flags, va_list ap)
 	p_n += p_spaces(flags, flags.width, sstr);
 	p_n += p_incrust_zeros(flags, sstr);
 	if ('-' == *sstr.str)
-		p_n += write(STDOUT_FILENO, sstr.str + 1, (sstr.size - 1) * sizeof(char));
+		p_n += write(STDOUT_FILENO, sstr.str + 1, (sstr.size - 1));
 	else
 		p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
 	p_n += p_spaces(flags, flags.neg, sstr);
@@ -48,12 +60,12 @@ int	fo_uint(t_flags flags, va_list ap)
 	register int	p_n;
 
 	sstr.size = va_arg(ap, unsigned int);
-	sstr.str = ft_utoa(sstr.size);
+	sstr.str = ft_uitoa(sstr.size);
 	sstr.size = ZERO;
 	if (ZERO != *sstr.str || ZERO != flags.point)
 		sstr.size = ft_strlen(sstr.str);
 	p_n = p_spaces(flags, flags.width, sstr);
-	p_n += p_zeros(flags, sstr);
+	p_n += p_zeros_point(flags, sstr);
 	p_n += write(STDOUT_FILENO, sstr.str, sstr.size * sizeof(char));
 	p_n += p_spaces(flags, flags.neg, sstr);
 	free(sstr.str);
@@ -91,10 +103,7 @@ int	fo_string(t_flags flags, va_list ap)
 {
 	register int	p_n;
 	t_ss			sstr;
-	char			*sp_aux;
-	char			c;
 
-	sp_aux = &c;
 	sstr.str = va_arg(ap, char *);
 	if (NULL == sstr.str)
 		sstr.str = "(null)";
@@ -103,26 +112,11 @@ int	fo_string(t_flags flags, va_list ap)
 		sstr.size = (size_t) flags.point;
 	p_n = ZERO;
 	if (flags.width > (int) sstr.size)
-	{
-		sp_aux = (char *) malloc((flags.width - sstr.size) * sizeof(char));
-		sp_aux = ft_memset((void *) sp_aux, ' ', flags.width - sstr.size);
-		p_n += write(STDOUT_FILENO, sp_aux, flags.width - sstr.size);
-		free(sp_aux);
-	}
+		p_n += p_aux(' ', flags.width - sstr.size);
 	if (flags.zero > (int) sstr.size)
-	{
-		sp_aux = (char *) malloc((flags.zero - sstr.size) * sizeof(char));
-		sp_aux = ft_memset((void *) sp_aux, '0', flags.zero - sstr.size);
-		p_n += write(STDOUT_FILENO, sp_aux, flags.zero - sstr.size);
-		free(sp_aux);
-	}
-	p_n +=	write(STDOUT_FILENO, sstr.str, sstr.size);
+		p_n += p_aux('0', flags.zero - sstr.size);
+	p_n += write(STDOUT_FILENO, sstr.str, sstr.size);
 	if (flags.neg > (int) sstr.size)
-	{
-		sp_aux = (char *) malloc((flags.neg - sstr.size) * sizeof(char));
-		sp_aux = ft_memset((void *) sp_aux, ' ', flags.neg - sstr.size);
-		p_n += write(STDOUT_FILENO, sp_aux, flags.neg - sstr.size);
-		free(sp_aux);
-	}
+		p_n += p_aux(' ', flags.neg - sstr.size);
 	return (p_n);
 }

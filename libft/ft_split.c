@@ -18,7 +18,7 @@ static void	ft_free_split(char **str, int i, size_t *size)
 		free(str[i]);
 	free (str);
 	str = NULL;
-	*size = ZERO;
+	size = ZERO;
 }
 
 static size_t	ft_count_word(char const *s, char c)

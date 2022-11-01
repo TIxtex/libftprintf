@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/08/15 11:21:16 by uliherre          #+#    #+#              #
+#    Updated: 2022/09/12 00:51:59 by uliherre         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = libftprintf.a
 CC = gcc -std=c89
 CFLAGS = -Wall -Wextra -Werror
@@ -13,7 +25,8 @@ pf_print.c \
 pf_print_b.c \
 pf_flag.c \
 pf_flag_b.c \
-pf_print_tools.c
+pf_print_tools.c \
+ft_utoa.c
 
 ALL_S = $(SOURCES:%.c=$(DIR)%.c)
 
